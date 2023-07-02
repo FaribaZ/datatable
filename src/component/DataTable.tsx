@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import TablePagination from "@mui/material/TablePagination";
-import SearchBar from "material-ui-search-bar";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
 import { debounce } from "lodash";
+import TableComponent from "./TableComponent";
+import PaginationComponent from "./PaginationComponent";
+import SearchBarComponent from "./SearchBarComponent";
 
 interface Row {
   last_name: string;
@@ -99,10 +95,9 @@ const DataTable = () => {
 
   return (
     <Paper>
-      <SearchBar
-        value={searchQuery}
-        onChange={handleSearch}
-        onRequestSearch={() => setSearchQuery(searchQuery)}
+      <SearchBarComponent
+        searchQuery={searchQuery}
+        handleSearch={handleSearch}
       />
       {isFetching ? (
         <Box sx={{ width: "100%" }}>
@@ -127,55 +122,15 @@ const DataTable = () => {
         </div>
       ) : (
         <div style={{ maxHeight: "calc(100vh - 220px)", overflow: "auto" }}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell onClick={() => handleSort("last_name")}>
-                  Name
-                </TableCell>
-                <TableCell align="right" onClick={() => handleSort("gender")}>
-                  Gender
-                </TableCell>
-                <TableCell align="right" onClick={() => handleSort("state")}>
-                  State
-                </TableCell>
-                <TableCell align="right" onClick={() => handleSort("job")}>
-                  Job
-                </TableCell>
-              </TableRow>
-            </TableHead>
-
-            <TableBody>
-              {displayedRows.map((row: Row) => (
-                <TableRow
-                  key={row.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {row.last_name}
-                  </TableCell>
-                  <TableCell align="right">{row.gender}</TableCell>
-                  <TableCell align="right">{row.state}</TableCell>
-                  <TableCell align="right">{row.job}</TableCell>
-                </TableRow>
-              ))}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={4} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+          <TableComponent rows={displayedRows} handleSort={handleSort} />
         </div>
       )}
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={totalRows}
+      <PaginationComponent
+        totalRows={totalRows}
         rowsPerPage={rowsPerPage}
         page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
+        handleChangePage={handleChangePage}
+        handleChangeRowsPerPage={handleChangeRowsPerPage}
       />
     </Paper>
   );
