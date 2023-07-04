@@ -2,15 +2,12 @@
 import React from "react";
 import SearchBar from "material-ui-search-bar";
 
-interface SearchBarComponentProps {
+interface SearchProps {
   searchQuery: string;
   handleSearch: (searchedVal: string) => void;
 }
 
-const SearchBarComponent: React.FC<SearchBarComponentProps> = ({
-  searchQuery,
-  handleSearch,
-}) => {
+const Search: React.FC<SearchProps> = ({ searchQuery, handleSearch }) => {
   return (
     <SearchBar
       value={searchQuery}
@@ -20,4 +17,4 @@ const SearchBarComponent: React.FC<SearchBarComponentProps> = ({
   );
 };
 
-export default SearchBarComponent;
+export default Search;

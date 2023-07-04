@@ -4,24 +4,11 @@ import Paper from "@mui/material/Paper";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
-import { debounce } from "lodash";
+// import { debounce } from "lodash";
 import TableComponent from "./TableComponent";
 import Pagination from "./Pagination";
-import SearchBarComponent from "./SearchBarComponent";
-
-interface Row {
-  last_name: string;
-  id: number;
-  state: string;
-  gender: string;
-  job: string;
-  [key: string]: string | number;
-}
-
-interface ResponseData {
-  users: Row[];
-  total_users: number;
-}
+import Search from "./Search";
+import { fetchRows, ResponseData } from "./fetch";
 
 const DataTable = () => {
   const [page, setPage] = useState(0);
@@ -29,19 +16,6 @@ const DataTable = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [sortColumn, setSortColumn] = useState<string>("");
   const [sortDirection, setSortDirection] = useState<string>("asc");
-
-  const fetchRows = async (
-    page: number,
-    rowsPerPage: number,
-    searchQuery: string
-  ): Promise<ResponseData> => {
-    const url = `https://api.slingacademy.com/v1/sample-data/users?offset=${page}&limit=${rowsPerPage}&search=${searchQuery}&sort=${sortDirection}`;
-    const response = await fetch(url);
-    const data: ResponseData = await response.json();
-    return data;
-  };
-
-  // const [debouncedFetchRows] = useState(() => debounce(fetchRows, 300));
 
   const {
     data: responseData,
@@ -51,7 +25,7 @@ const DataTable = () => {
     isFetching,
   } = useQuery<ResponseData, Error>(
     ["rows", page, rowsPerPage, searchQuery],
-    () => fetchRows(page, rowsPerPage, searchQuery),
+    () => fetchRows(page, rowsPerPage, searchQuery, sortDirection),
     {
       keepPreviousData: true,
       retry: 0,
@@ -98,11 +72,8 @@ const DataTable = () => {
 
   return (
     <Paper>
-      <SearchBarComponent
-        searchQuery={searchQuery}
-        handleSearch={handleSearch}
-      />
-      {isFetching ? (
+      <Search searchQuery={searchQuery} handleSearch={handleSearch} />
+      {responseData && isFetching ? (
         <Box sx={{ width: "100%" }}>
           <LinearProgress />
         </Box>
@@ -120,7 +91,6 @@ const DataTable = () => {
         </div>
       ) : isError ? (
         <div>
-          Error:{" "}
           {error instanceof Error ? error.message : "Something went wrong"}
         </div>
       ) : (
