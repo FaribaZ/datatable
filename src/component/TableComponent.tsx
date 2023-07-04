@@ -1,4 +1,4 @@
-// TableComponent.tsx
+
 import React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -12,47 +12,53 @@ interface Row {
   state: string;
   gender: string;
   job: string;
+  [key: string]: string | number;
 }
 
-interface TableComponentProps {
+interface TableProps {
   rows: Row[];
   handleSort: (column: string) => void;
+  emptyRows: any;
 }
 
-const TableComponent: React.FC<TableComponentProps> = ({
+const TableComponent: React.FC<TableProps> = ({
   rows,
   handleSort,
+  emptyRows,
 }) => {
+  const columns = [
+    { key: "id", label: "ID" },
+    { key: "last_name", label: "Last Name" },
+    { key: "state", label: "State" },
+    { key: "gender", label: "Gender" },
+    { key: "job", label: "Job" },
+  ];
   return (
     <Table sx={{ minWidth: 650 }} aria-label="simple table">
       <TableHead>
         <TableRow>
-          <TableCell onClick={() => handleSort("last_name")}>Name</TableCell>
-          <TableCell align="right" onClick={() => handleSort("gender")}>
-            Gender
-          </TableCell>
-          <TableCell align="right" onClick={() => handleSort("state")}>
-            State
-          </TableCell>
-          <TableCell align="right" onClick={() => handleSort("job")}>
-            Job
-          </TableCell>
+          {columns.map((column) => (
+            <TableCell key={column.key} align="center">
+              {column.label}
+            </TableCell>
+          ))}
         </TableRow>
       </TableHead>
       <TableBody>
-        {rows.map((row: Row) => (
-          <TableRow
-            key={row.id}
-            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-          >
-            <TableCell component="th" scope="row">
-              {row.last_name}
-            </TableCell>
-            <TableCell align="right">{row.gender}</TableCell>
-            <TableCell align="right">{row.state}</TableCell>
-            <TableCell align="right">{row.job}</TableCell>
+        {rows.map((row) => (
+          <TableRow key={row.id}>
+            {columns.map((column) => (
+              <TableCell key={column.key} align="center">
+                {row[column.key]}
+              </TableCell>
+            ))}
           </TableRow>
         ))}
+        {emptyRows > 0 && (
+          <TableRow style={{ height: 53 * emptyRows }}>
+            <TableCell colSpan={5} />
+          </TableRow>
+        )}
       </TableBody>
     </Table>
   );

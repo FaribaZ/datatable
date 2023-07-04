@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
 import { debounce } from "lodash";
 import TableComponent from "./TableComponent";
-import PaginationComponent from "./PaginationComponent";
+import Pagination from "./Pagination";
 import SearchBarComponent from "./SearchBarComponent";
 
 interface Row {
@@ -15,6 +15,7 @@ interface Row {
   state: string;
   gender: string;
   job: string;
+  [key: string]: string | number;
 }
 
 interface ResponseData {
@@ -39,6 +40,8 @@ const DataTable = () => {
     const data: ResponseData = await response.json();
     return data;
   };
+
+  // const [debouncedFetchRows] = useState(() => debounce(fetchRows, 300));
 
   const {
     data: responseData,
@@ -69,14 +72,14 @@ const DataTable = () => {
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+    setRowsPerPage(Number(event.target.value));
     setPage(0);
   };
 
-  const handleSearch = debounce((searchedVal: string) => {
+  const handleSearch = (searchedVal: string) => {
     setSearchQuery(searchedVal);
     setPage(0);
-  }, 300);
+  };
 
   const handleSort = (column: string) => {
     if (sortColumn === column) {
@@ -122,10 +125,14 @@ const DataTable = () => {
         </div>
       ) : (
         <div style={{ maxHeight: "calc(100vh - 220px)", overflow: "auto" }}>
-          <TableComponent rows={displayedRows} handleSort={handleSort} />
+          <TableComponent
+            rows={displayedRows}
+            handleSort={handleSort}
+            emptyRows={emptyRows}
+          />
         </div>
       )}
-      <PaginationComponent
+      <Pagination
         totalRows={totalRows}
         rowsPerPage={rowsPerPage}
         page={page}
