@@ -9,6 +9,7 @@ import TableComponent from "./TableComponent";
 import Pagination from "./Pagination";
 import Search from "./Search";
 import { fetchRows, ResponseData } from "./fetch";
+import useDebounce from "./useDebounce";
 
 const DataTable = () => {
   const [page, setPage] = useState(0);
@@ -16,6 +17,7 @@ const DataTable = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [sortColumn, setSortColumn] = useState<string>("");
   const [sortDirection, setSortDirection] = useState<string>("asc");
+  const debounceSearchQuery = useDebounce(searchQuery);
 
   const {
     data: responseData,
@@ -24,7 +26,7 @@ const DataTable = () => {
     error,
     isFetching,
   } = useQuery<ResponseData, Error>(
-    ["rows", page, rowsPerPage, searchQuery],
+    ["rows", page, rowsPerPage, debounceSearchQuery],
     () => fetchRows(page, rowsPerPage, searchQuery, sortDirection),
     {
       keepPreviousData: true,
