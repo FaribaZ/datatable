@@ -9,13 +9,23 @@ import TableComponent from "./TableComponent";
 import Pagination from "./Pagination";
 import Search from "./Search";
 import { fetchRows, ResponseData } from "./fetch";
-
+import { useDebounce } from "react-use";
 const DataTable = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [sortColumn, setSortColumn] = useState<string>("");
   const [sortDirection, setSortDirection] = useState<string>("asc");
+  const [debounceSearcheValue, setDebounceSearchValue] = useState<string>("");
+
+  const [, cancel] = useDebounce(
+    () => {
+      console.log("value");
+      setDebounceSearchValue(searchQuery);
+    },
+    2000,
+    [searchQuery]
+  );
 
   const {
     data: responseData,
@@ -24,8 +34,11 @@ const DataTable = () => {
     error,
     isFetching,
   } = useQuery<ResponseData, Error>(
-    ["rows", page, rowsPerPage, searchQuery],
-    () => fetchRows(page, rowsPerPage, searchQuery, sortDirection),
+    ["rows", page, rowsPerPage, debounceSearcheValue],
+    () =>
+      fetchRows(
+        `/sample-data/users?offset=${page}&limit=${rowsPerPage}&search=${debounceSearcheValue}&sort=${sortDirection}`
+      ),
     {
       keepPreviousData: true,
       retry: 0,

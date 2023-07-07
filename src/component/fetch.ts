@@ -11,17 +11,12 @@ export interface ResponseData {
   users: Row[];
   total_users: number;
 }
-
-export const fetchRows = async (
-  page: number,
-  rowsPerPage: number,
-  searchQuery: string,
-  sortDirection: string
-): Promise<ResponseData> => {
-  const url = `https://api.slingacademy.com/v1/sample-data/users?offset=${page}&limit=${rowsPerPage}&search=${searchQuery}&sort=${sortDirection}`;
+export const fetchRows = async (pathParam: string): Promise<ResponseData> => {
+  // console.log(process.env.REACT_APP_BASE_URL);
+  const url = `${process.env.REACT_APP_BASE_URL}${pathParam}`;
   const response = await fetch(url);
   const data: ResponseData = await response.json();
   return data;
 };
 
-// const [debouncedFetchRows] = useState(() => debounce(fetchRows, 300));
+
