@@ -4,28 +4,18 @@ import Paper from "@mui/material/Paper";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
-// import { debounce } from "lodash";
 import TableComponent from "./TableComponent";
 import Pagination from "./Pagination";
 import Search from "./Search";
 import { fetchRows, ResponseData } from "./fetch";
-import { useDebounce } from "react-use";
+import { useDebounce } from "usehooks-ts";
 const DataTable = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [sortColumn, setSortColumn] = useState<string>("");
   const [sortDirection, setSortDirection] = useState<string>("asc");
-  const [debounceSearcheValue, setDebounceSearchValue] = useState<string>("");
-
-  const [, cancel] = useDebounce(
-    () => {
-      console.log("value");
-      setDebounceSearchValue(searchQuery);
-    },
-    2000,
-    [searchQuery]
-  );
+  const debouncedSearcheValue = useDebounce<string>(searchQuery, 200);
 
   const {
     data: responseData,
@@ -34,10 +24,10 @@ const DataTable = () => {
     error,
     isFetching,
   } = useQuery<ResponseData, Error>(
-    ["rows", page, rowsPerPage, debounceSearcheValue],
+    ["rows", page, rowsPerPage, debouncedSearcheValue],
     () =>
       fetchRows(
-        `/sample-data/users?offset=${page}&limit=${rowsPerPage}&search=${debounceSearcheValue}&sort=${sortDirection}`
+        `/sample-data/users?offset=${page}&limit=${rowsPerPage}&search=${debouncedSearcheValue}&sort=${sortDirection}`
       ),
     {
       keepPreviousData: true,

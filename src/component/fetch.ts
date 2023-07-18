@@ -11,6 +11,11 @@ export interface ResponseData {
   users: Row[];
   total_users: number;
 }
+export interface TableProps {
+  rows: Row[];
+  handleSort: (column: string) => void;
+  emptyRows: any;
+}
 export const fetchRows = async (pathParam: string): Promise<ResponseData> => {
   // console.log(process.env.REACT_APP_BASE_URL);
   const url = `${process.env.REACT_APP_BASE_URL}${pathParam}`;
