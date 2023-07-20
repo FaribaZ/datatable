@@ -11,7 +11,17 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/add" element={<SecondPage />} />
+          <Route
+            path="/add"
+            element={
+              <SecondPage
+                rows={[]}
+                emptyRows={[]}
+                handleSort={() => {}}
+                columns={[{ key: "string", label: "string" }]}
+              />
+            }
+          />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>
