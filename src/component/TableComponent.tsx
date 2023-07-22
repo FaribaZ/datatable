@@ -4,20 +4,11 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { Row, TableProps } from "./fetch";
+import { TableProps } from "./fetch";
+// import { useLoaderData } from "react-router-dom";
 
 
-{
-  /* <TableComponent
-  columns={[
-    { key: "id", label: "ID" },
-    { key: "last_name", label: "Last Name" },
-    { key: "state", label: "State" },
-    { key: "gender", label: "Gender" },
-    { key: "job", label: "Job" },
-  ]}
-/>; */
-}
+
 const TableComponent: React.FC<TableProps> = ({
   rows,
   handleSort,

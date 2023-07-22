@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Paper from "@mui/material/Paper";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -16,7 +16,6 @@ const DataTable = () => {
   const [sortColumn, setSortColumn] = useState<string>("");
   const [sortDirection, setSortDirection] = useState<string>("asc");
   const debouncedSearcheValue = useDebounce<string>(searchQuery, 200);
-
   const {
     data: responseData,
     isLoading,
@@ -36,21 +35,21 @@ const DataTable = () => {
       refetchOnMount: false,
     }
   );
+  const handleChangeRowsPerPage = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setRowsPerPage(Number(event.target.value));
+      setPage(0);
+    },
+    [setRowsPerPage, setPage]
+  );
 
   useEffect(() => {
     setSearchQuery("");
     setPage(0);
-  }, [rowsPerPage]);
+  }, [handleChangeRowsPerPage]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(Number(event.target.value));
-    setPage(0);
   };
 
   const handleSearch = (searchedVal: string) => {

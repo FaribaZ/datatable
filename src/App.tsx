@@ -1,29 +1,44 @@
 import "./App.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import { Row, TableProps } from "./component/fetch";
-import SecondPage from "./pages/SecondPage";
+import TableComponent from "./component/TableComponent";
+import { Pagination } from "@mui/material";
+import Search from "./component/Search";
+import NavLayout from "./pages/NavLayout";
+import LoanLayout from "./pages/LoanLayout";
 
 function App() {
   return (
     <QueryClientProvider client={new QueryClient()}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
+      <NavLayout />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/loan" element={<LoanLayout />}>
           <Route
-            path="/add"
+            index
             element={
-              <SecondPage
-                rows={[]}
-                emptyRows={[]}
-                handleSort={() => {}}
-                columns={[{ key: "string", label: "string" }]}
-              />
+              <div>
+                <TableComponent
+                  rows={[]}
+                  emptyRows={[]}
+                  handleSort={() => {}}
+                  columns={[
+                    { key: "id", label: "ID2" },
+                    { key: "job", label: "Job2" },
+                  ]}
+                />
+                <Pagination />
+              </div>
             }
           />
-        </Routes>
-      </BrowserRouter>
+          <Route
+            path="car"
+            element={<Search searchQuery={""} handleSearch={() => {}} />}
+          />
+          <Route path="marriage" element={<Pagination />} />
+        </Route>
+      </Routes>
     </QueryClientProvider>
   );
 }

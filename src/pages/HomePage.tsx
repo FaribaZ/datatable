@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import DataTable from "../component/DataTable";
 
 const HomePage = () => {
@@ -6,7 +6,7 @@ const HomePage = () => {
     <div>
       <DataTable />
       <div>
-        <Link to="/add">See another page!</Link>
+        <Outlet />
       </div>
     </div>
   );
