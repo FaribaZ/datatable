@@ -3,7 +3,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import TableComponent from "./component/TableComponent";
-import { Pagination } from "@mui/material";
 import Search from "./component/Search";
 import NavLayout from "./pages/NavLayout";
 import LoanLayout from "./pages/LoanLayout";
@@ -24,19 +23,35 @@ function App() {
                   emptyRows={[]}
                   handleSort={() => {}}
                   columns={[
-                    { key: "id", label: "ID2" },
-                    { key: "job", label: "Job2" },
+                    { key: "id", label: "ID" },
+                    { key: "last_name", label: "Last Name" },
+                    { key: "state", label: "State" },
+                    { key: "gender", label: "Gender" },
+                    { key: "job", label: "Job" },
                   ]}
                 />
-                <Pagination />
               </div>
+            }
+          />
+          <Route
+            path="marriage"
+            element={
+              <TableComponent
+                rows={[]}
+                emptyRows={[]}
+                handleSort={() => {}}
+                columns={[
+                  { key: "name", label: "Name" },
+                  { key: "category", label: "Category" },
+                  { key: "price", label: "Price" },
+                ]}
+              />
             }
           />
           <Route
             path="car"
             element={<Search searchQuery={""} handleSearch={() => {}} />}
           />
-          <Route path="marriage" element={<Pagination />} />
         </Route>
       </Routes>
     </QueryClientProvider>
