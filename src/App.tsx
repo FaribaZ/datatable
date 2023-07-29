@@ -6,6 +6,7 @@ import TableComponent from "./component/TableComponent";
 import Search from "./component/Search";
 import NavLayout from "./pages/NavLayout";
 import LoanLayout from "./pages/LoanLayout";
+import Loan from "./pages/Loan";
 
 function App() {
   return (
@@ -13,28 +14,10 @@ function App() {
       <NavLayout />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/loan" element={<LoanLayout />}>
+        <Route path=":loan" element={<LoanLayout />}>
+          <Route index element={<Loan />} />
           <Route
-            index
-            element={
-              <div>
-                <TableComponent
-                  rows={[]}
-                  emptyRows={[]}
-                  handleSort={() => {}}
-                  columns={[
-                    { key: "id", label: "ID" },
-                    { key: "last_name", label: "Last Name" },
-                    { key: "state", label: "State" },
-                    { key: "gender", label: "Gender" },
-                    { key: "job", label: "Job" },
-                  ]}
-                />
-              </div>
-            }
-          />
-          <Route
-            path="marriage"
+            path=":marriage"
             element={
               <TableComponent
                 rows={[]}
@@ -49,7 +32,7 @@ function App() {
             }
           />
           <Route
-            path="car"
+            path=":car"
             element={<Search searchQuery={""} handleSearch={() => {}} />}
           />
         </Route>
