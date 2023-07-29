@@ -9,8 +9,9 @@ export interface Row {
 
 
 export interface ResponseData {
-  users: Row[];
+  users?: Row[];
   total_users: number;
+  products?: Row[];
 }
 export interface TableProps {
   rows: Row[];
@@ -21,6 +22,7 @@ export interface TableProps {
 export const fetchRows = async (pathParam: string): Promise<ResponseData> => {
   // console.log(process.env.REACT_APP_BASE_URL);
   const url = `${process.env.REACT_APP_BASE_URL}${pathParam}`;
+  console.log(url);
   const response = await fetch(url);
   const data: ResponseData = await response.json();
   return data;
